@@ -9,7 +9,6 @@ wheels/
 # Virtual environments
 .venv
 
-# Dados, checkpoints e imagens geradas (grandes / regeneráveis)
+# Dados e checkpoints (grandes / regeneráveis)
 data/
 runs/
-app/assets/

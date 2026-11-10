@@ -15,7 +15,7 @@
   }
 
   // pré-carrega tudo para não haver atraso no telão
-  const all = [...M.real, ...M.stages.flatMap((s) => s.fakes), ...M.timelapse.map((t) => t.img), ...M.morph.flat()];
+  const all = [...M.real, ...M.real_hq, ...M.title, ...M.stages.flatMap((s) => s.fakes), ...M.timelapse.map((t) => t.img), ...M.morph.flat()];
   all.forEach((p) => { new Image().src = A(p); });
 
   const slides = [...document.querySelectorAll(".slide")];
@@ -27,8 +27,7 @@
     enter() {
       const box = $("#title-faces");
       box.innerHTML = "";
-      const last = M.stages[M.stages.length - 1].fakes;
-      last.slice(0, 6).forEach((p, i) => {
+      M.title.forEach((p, i) => {
         const img = new Image();
         img.src = A(p);
         img.alt = "Rosto gerado por IA";
@@ -43,7 +42,7 @@
     fakeImg: $("#story-fake img"), realImg: $("#story-real img"),
     stamp: $("#story-stamp"), caption: $("#story-caption"),
   };
-  const S = M.stages;
+  const S = M.stages.filter((s) => s.model === "ours"); // a história usa só o nosso modelo
   const storySteps = [
     { g: 1, d: 0, fake: S[0], real: 0, stamp: null,
       text: "O falsificador começa sem saber nada. Sua primeira tentativa de rosto é um borrão." },
@@ -85,9 +84,9 @@
 
   function newRound() {
     const st = M.stages[game.round];
-    const reals = shuffle(M.real.filter((r) => !game.used.has(r))).slice(0, 3);
+    const reals = shuffle(M[st.realset].filter((r) => !game.used.has(r))).slice(0, 3);
     reals.forEach((r) => game.used.add(r));
-    const fake = pick(st.fakes.slice(0, 4)); // os mais convincentes daquele estágio
+    const fake = pick(st.fakes);
     const items = shuffle([...reals.map((src) => ({ src, fake: false })), { src: fake, fake: true }]);
     game.revealed = false;
     cardsEl.classList.remove("revealed");
@@ -100,8 +99,12 @@
       cardsEl.appendChild(c);
     });
     const n = M.stages.length;
-    const hint = ["um começo difícil para ele", "ele está pegando o jeito", "agora fica sério", "treino completo"][Math.min(game.round, 3)];
-    $("#round-info").innerHTML = `Rodada <b>${game.round + 1}</b> de ${n} · o falsificador treinou <b>${fmt(st.step)}</b> vezes — ${hint}`;
+    const ours = M.stages.filter((s) => s.model === "ours");
+    const hints = ["um começo difícil para ele", "ele está pegando o jeito", "treino completo no nosso notebook"];
+    const info = st.model === "big"
+      ? "agora um <b>falsificador profissional</b>: uma GAN grande, treinada em computadores potentes"
+      : `o falsificador treinou <b>${fmt(st.step)}</b> vezes — ${hints[Math.min(ours.indexOf(st), hints.length - 1)]}`;
+    $("#round-info").innerHTML = `Rodada <b>${game.round + 1}</b> de ${n} · ${info}`;
     $("#round-msg").innerHTML = 'Qual destes rostos é <strong>falso</strong>? <span class="hint">(clique ou tecle 1–4)</span>';
   }
 
@@ -132,7 +135,7 @@
     game.done = true;
     const n = M.stages.length;
     const verdict = game.g > 0
-      ? "O falsificador conseguiu te enganar — e ele treinou só algumas horas num notebook."
+      ? "O falsificador conseguiu te enganar!"
       : "Você venceu desta vez! Mas repare como ficou mais difícil a cada rodada.";
     slideJogo.innerHTML = `<div class="final">
       <p class="big">Detetive ${game.d} × ${game.g} Falsificador</p>
