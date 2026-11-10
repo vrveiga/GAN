@@ -1,0 +1,26 @@
+[project]
+name = "gan-detetive"
+version = "0.1.0"
+description = "Apresentação interativa sobre GANs: o falsificador e o detetive"
+readme = "README.md"
+authors = [
+    { name = "Vitor Veiga", email = "141955738+vrveiga@users.noreply.github.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "huggingface-hub>=2.4.0",
+    "numpy>=2.5.4",
+    "pillow>=13.0.0",
+    "pyarrow>=26.0.1",
+    "torch>=2.15.0",
+    "torchvision>=0.29.2",
+]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+torchvision = { index = "pytorch-cpu" }

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>O Falsificador e o Detetive</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main id="deck">
+
+  <!-- 1. Título -->
+  <section class="slide" data-name="titulo">
+    <div class="center">
+      <p class="kicker">Inteligência Artificial, explicada em 5 minutos</p>
+      <h1>O Falsificador<br>e o Detetive</h1>
+      <p class="lead">Como uma IA aprende a criar rostos de pessoas que <em>não existem</em></p>
+      <div class="title-faces" id="title-faces"></div>
+    </div>
+  </section>
+
+  <!-- 2. História -->
+  <section class="slide" data-name="historia" data-steps="5">
+    <h2 class="slide-title">Duas IAs, um jogo</h2>
+    <div class="story">
+      <div class="actor" id="actor-g">
+        <div class="actor-icon">
+          <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 6C17 6 6 16 6 29c0 10 7 15 14 15 4 0 5 3 5 6 0 5 3 8 8 8 15 0 25-13 25-28S47 6 32 6z" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="20" cy="26" r="4" fill="var(--c-red)"/><circle cx="31" cy="17" r="4" fill="var(--c-gold)"/><circle cx="44" cy="22" r="4" fill="var(--c-blue)"/><circle cx="46" cy="36" r="4" fill="var(--c-green)"/></svg>
+        </div>
+        <h3>O Falsificador</h3>
+        <p class="role">cria rostos falsos</p>
+      </div>
+
+      <div class="story-stage">
+        <div class="canvas-pair">
+          <figure class="frame" id="story-fake"><img alt=""><figcaption>criação do falsificador</figcaption><div class="stamp" id="story-stamp"></div></figure>
+          <figure class="frame real-ref" id="story-real"><img alt=""><figcaption>foto real</figcaption></figure>
+        </div>
+        <p class="story-caption" id="story-caption"></p>
+      </div>
+
+      <div class="actor" id="actor-d">
+        <div class="actor-icon">
+          <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="26" cy="26" r="16" fill="none" stroke="currentColor" stroke-width="4"/><path d="M38 38l18 18" stroke="currentColor" stroke-width="7" stroke-linecap="round"/></svg>
+        </div>
+        <h3>O Detetive</h3>
+        <p class="role">tenta descobrir o que é falso</p>
+      </div>
+    </div>
+    <div class="reveal" id="story-reveal">
+      <p>Isso é uma <strong>GAN</strong> — <span class="pt">Rede Generativa Adversária</span></p>
+      <p class="small">Gerador (falsificador) &nbsp;⇄&nbsp; Discriminador (detetive). Um aprende com o outro.</p>
+    </div>
+  </section>
+
+  <!-- 3. Jogo -->
+  <section class="slide" data-name="jogo">
+    <div class="game-head">
+      <h2 class="slide-title">Agora <em>você</em> é o detetive</h2>
+      <div class="scoreboard">
+        <div class="score det"><span>Detetive</span><b id="score-d">0</b></div>
+        <div class="score fal"><span>Falsificador</span><b id="score-g">0</b></div>
+      </div>
+    </div>
+    <p class="round-info" id="round-info"></p>
+    <div class="cards" id="cards"></div>
+    <p class="round-msg" id="round-msg">Qual destes rostos é <strong>falso</strong>? <span class="hint">(clique ou tecle 1–4)</span></p>
+  </section>
+
+  <!-- 4. Timelapse -->
+  <section class="slide" data-name="timelapse">
+    <h2 class="slide-title">Do ruído ao rosto</h2>
+    <div class="timelapse">
+      <img id="tl-img" alt="Rostos gerados ao longo do treino">
+      <div class="tl-side">
+        <p class="tl-step">Rodada de treino<br><b id="tl-step">0</b></p>
+        <div class="bar"><div id="tl-bar"></div></div>
+        <p class="small">Os mesmos 8 "pontos de partida" aleatórios, ao longo do treino. Ninguém ensinou o que é um olho ou um nariz: o falsificador descobriu sozinho, só tentando enganar o detetive.</p>
+        <p class="hint">Espaço: pausar / continuar</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Morph -->
+  <section class="slide" data-name="morph">
+    <h2 class="slide-title">Um "mapa" de rostos que não existem</h2>
+    <div class="morph">
+      <img id="morph-img" alt="Rosto gerado">
+      <div class="morph-ctl">
+        <input type="range" id="morph-slider" min="0" max="39" value="0" aria-label="Misturar rostos">
+        <div class="morph-labels"><span>rosto A</span><span>rosto B</span></div>
+        <p class="small">A IA não copia fotos: ela aprendeu um espaço contínuo de rostos. Andando por ele, um rosto se transforma suavemente em outro — e nenhum deles é uma pessoa real.</p>
+        <p class="hint">Espaço: animar · N: novo par de rostos</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Mundo real -->
+  <section class="slide" data-name="mundo" data-steps="2">
+    <h2 class="slide-title">E no mundo real?</h2>
+    <div class="uses">
+      <div class="use"><b>Arte e design</b><span>imagens, personagens, texturas para jogos e filmes</span></div>
+      <div class="use"><b>Medicina</b><span>imagens sintéticas para treinar diagnósticos sem expor pacientes</span></div>
+      <div class="use"><b>Fotos</b><span>restaurar fotos antigas, aumentar a resolução</span></div>
+      <div class="use warn"><b>Deepfakes</b><span>vídeos e fotos falsos de pessoas reais: golpes e desinformação</span></div>
+    </div>
+    <div class="reveal" id="end-reveal">
+      <p>Nosso falsificador treinou só algumas horas num notebook.<br>As IAs atuais treinam meses em milhares de computadores.</p>
+      <p class="big-q">Antes de compartilhar: <strong>isso é real?</strong></p>
+    </div>
+  </section>
+
+</main>
+
+<nav class="progress" id="progress"></nav>
+
+<script src="assets/manifest.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
